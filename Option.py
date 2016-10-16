@@ -7,11 +7,11 @@ class Option(object):
     result = None
 
     @abc.abstractmethod
-    def set_arguments(self):
+    def populate_arguments(self):
         raise NotImplementedError
     
     def get_price(self):
-        self.set_arguments()
+        self.populate_arguments()
         self.engine.calculate()
         return self.engine.result
 
@@ -24,7 +24,7 @@ class EuropeanOption(Option):
         self.ty = type_
         self.strike = strike_
 
-    def set_arguments(self):
+    def populate_arguments(self):
         if not self.engine:
             print '>> Pricing engine not defined. Call set_engine().\n'
             exit(1)

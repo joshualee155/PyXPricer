@@ -39,11 +39,11 @@ class StochasticProcess1D(object):
         return newX
     
 class TimeHomoItoProcess1D(StochasticProcess1D):
-    def __init__(self, x0_, drift_, diffusion_, d_='Euler'):
-        self.x0 = x0_
-        self.drift = drift_
-        self.diffusion = diffusion_
-        self.Discretization = d_
+    def __init__(self, x0, drift, diffusion, d='Euler'):
+        self.x0 = x0
+        self.drift = drift
+        self.diffusion = diffusion
+        self.Discretization = d
 
     def increment(self,oldX,h):
         try:
@@ -69,11 +69,11 @@ class TimeHomoItoProcess1D(StochasticProcess1D):
         
         
 class GBM1D(StochasticProcess1D):
-    def __init__(self,x0_,mu_, sigma_,d_ = None):
-        self.x0 = x0_
-        self.mu = mu_
-        self.sigma = sigma_
-        self.Discretization = d_
+    def __init__(self,x0, mu, sigma, d = None):
+        self.x0 = x0
+        self.mu = mu
+        self.sigma = sigma
+        self.Discretization = d
     
     def increment(self, oldX, h):
         try:

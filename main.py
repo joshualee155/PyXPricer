@@ -18,7 +18,7 @@ def payoff_CashOrNothing(K):
 
 def price_option(option, engine):
     option.engine = engine
-    option.set_arguments()
+    option.populate_arguments()
     return option.get_price()
     
 def price_EuropeanCall():
@@ -27,7 +27,7 @@ def price_EuropeanCall():
     sigma0 = 0.2
     expiry = 1
     drift = FC.C2Function1D(lambda x: 0)
-    Kset = np.linspace(8.0, 12.0, 4)
+    Kset = np.linspace(8.0, 12.0, 5)
     diffusion_set = {'const': FC.C2Function1D(lambda x: sigma0),
                      'linear': FC.C2Function1D(lambda x: sigma0 * x),
                      'sqrt': FC.Function1D(lambda x: sigma0 * np.sqrt(x)),
@@ -46,7 +46,7 @@ def price_EuropeanCall():
         engineMC = PE.MCEuropeanEngine(process, r)
         price_MC[kk] = price_option(option,engineMC)
         
-        engineFD = PE.FDEuropeanNoDriftTimeHomoIto(process, r, 200, 500)
+        engineFD = PE.FDEuropeanNoDriftTimeHomoIto( process )
         engineFD.set_boundary('Neumann',1,0)
         price_FD[kk] = price_option(option,engineFD)
         

@@ -1,7 +1,7 @@
 # base class of 1-dim function
 class Function1D(object):
-    def __init__(self, innerFunc_):
-        self.innerFunc = innerFunc_
+    def __init__(self, innerFunc):
+        self.innerFunc = innerFunc
         
     def __call__(self, x):
         return self.innerFunc(x)
@@ -9,9 +9,9 @@ class Function1D(object):
 
 # subclass: 1-dim function 1st order differentiable
 class C1Function1D(Function1D):
-    def __init__(self, innerFunc_, firstDerivative_ = None):
-        super(C1Function1D, self).__init__(innerFunc_)
-        self.firstDerivative = firstDerivative_
+    def __init__(self, innerFunc, firstDerivative = None):
+        super(C1Function1D, self).__init__(innerFunc)
+        self.firstDerivative = firstDerivative
     
     def der_1st(self, x):
         if self.firstDerivative:
@@ -22,9 +22,9 @@ class C1Function1D(Function1D):
         
 # subclass: 1-dim function  2nd order differentiable     
 class C2Function1D(C1Function1D):
-    def __init__(self, innerFunc_, firstDerivative_ = None, secondDerivative_ = None):
-        super(C2Function1D, self).__init__(innerFunc_, firstDerivative_)
-        self.secondDerivative = secondDerivative_
+    def __init__(self, innerFunc, firstDerivative = None, secondDerivative = None):
+        super(C2Function1D, self).__init__(innerFunc, firstDerivative)
+        self.secondDerivative = secondDerivative
         
     def der_2nd(self, x):
         if self.secondDerivative:

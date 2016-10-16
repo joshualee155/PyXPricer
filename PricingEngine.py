@@ -14,12 +14,12 @@ class PricingEngine(object):
         return
 
 class MCEuropeanEngine(PricingEngine):
-    def __init__(self, process_ = None, discount_=0, daysperyear_ = 260, numofruns_ = 10000):
+    def __init__(self, process, discount=0, daysperyear = 260, numofruns = 10000):
         super(MCEuropeanEngine, self).__init__()
-        self.process = process_
-        self.discount = discount_
-        self.daysperyear = daysperyear_
-        self.numofruns = numofruns_
+        self.process = process
+        self.discount = discount
+        self.daysperyear = daysperyear
+        self.numofruns = numofruns
 
     def calculate(self):
         if not self.arguments:
@@ -39,20 +39,20 @@ class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
     upper_value = None
     lower_value = None
 
-    def __init__(self, process_=None, discount_=0, nT_=100, nS_=100, maxS_=2, minS_=0, scheme_=0):
+    def __init__(self, process, discount=0, nT=100, nS=100, maxS=2, minS=0, scheme=0):
         super(FDEuropeanNoDriftTimeHomoIto, self).__init__()
-        self.process = process_
-        self.discount = discount_
-        self.nT = nT_
-        self.nS = nS_
-        self.maxS = maxS_
-        self.minS = minS_
-        self.scheme = scheme_   # 0: Explicit, 1: Implicit, 0.5: Crank Nikoson
+        self.process = process
+        self.discount = discount
+        self.nT = nT
+        self.nS = nS
+        self.maxS = maxS
+        self.minS = minS
+        self.scheme = scheme   # 0: Explicit, 1: Implicit, 0.5: Crank Nikoson
         
-    def set_boundary(self, boundarytype_= None, upper_value_ = None, lower_value_ = None):       
-        self.boundarytype= boundarytype_
-        self.upper_value = upper_value_
-        self.lower_value = lower_value_
+    def set_boundary(self, boundarytype= None, upper_value = None, lower_value = None):
+        self.boundarytype= boundarytype
+        self.upper_value = upper_value
+        self.lower_value = lower_value
         
     def calculate(self):
         if not self.boundarytype:
@@ -114,10 +114,10 @@ class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
         
         
 class BSAnalyticEngine(PricingEngine):        
-    def __init__(self, process_ = None, discount_ = 0):
+    def __init__(self, process, discount = 0):
         super(BSAnalyticEngine, self).__init__()
-        self.process = process_
-        self.discount = discount_
+        self.process = process
+        self.discount = discount
 
     @staticmethod
     def __BSPutCall(S0, K, r, sigma, T, ty):

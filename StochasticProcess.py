@@ -1,15 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun  8 14:43:45 2016
-
-@author: CongLiu
-"""
-
-'''
-. 2 Discretization schemes are considered,  Discretization = Enum('Euler', 'Milstein')
-. simulation grids currently assumed equally segmented, can be further generalized 
-'''
-
 import numpy as np
 import FunctionClass
 import abc

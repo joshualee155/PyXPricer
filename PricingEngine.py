@@ -1,10 +1,3 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jun  9 08:43:56 2016
-
-@author: CongLiu
-"""
-
 import numpy as np
 import TriDiag as TD
 from scipy.stats import norm

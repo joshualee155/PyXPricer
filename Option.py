@@ -1,16 +1,12 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Jun  9 08:54:51 2016
-
-@author: CongLiu
-"""
-
+import abc
 
 class Option(object):
+    __metaclass__ = abc.ABCMeta
+
     engine = None
     result = None
-    def __init__(self): pass
 
+    @abc.abstractmethod
     def set_arguments(self):
         raise NotImplementedError
     
@@ -21,14 +17,13 @@ class Option(object):
 
 
 class EuropeanOption(Option):
-      
-    def __init__(self, payoff_ = None, expiry_ = None,type_ = None, strike_ = None):
+    def __init__(self, payoff_=None, expiry_=None, type_=None, strike_=None):
         super(EuropeanOption, self).__init__()
         self.payoff = payoff_
         self.expiry = expiry_
         self.ty = type_
         self.strike = strike_
-    
+
     def set_arguments(self):
         if not self.engine:
             print '>> Pricing engine not defined. Call set_engine().\n'

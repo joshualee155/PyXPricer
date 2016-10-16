@@ -1,12 +1,4 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Wed Jun  8 16:01:39 2016
-
-@author: CongLiu
-"""
-
-    
- # base class of 1-dim function   
+# base class of 1-dim function
 class Function1D(object):
     def __init__(self, innerFunc_):
         self.innerFunc = innerFunc_

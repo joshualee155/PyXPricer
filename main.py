@@ -263,4 +263,5 @@ def price_CallOrNothing():
     #pd.DataFrame(results).to_csv(outputdir + 'Digital_sine.csv', header = False, index = False)    
 
 
-main()
+if __name__ == "__main__":
+    main()

@@ -8,15 +8,17 @@ Created on Thu Jun  9 08:43:56 2016
 import numpy as np
 import TriDiag as TD
 from scipy.stats import norm
-
+import abc
 
 class PricingEngine(object):
+    __metaclass__ = abc.ABCMeta
+
     result = None
     arguments = {}
-    def __init__(self): pass
 
+    @abc.abstractmethod
     def calculate(self):
-        raise NotImplementedError
+        return
 
 class MCEuropeanEngine(PricingEngine):
     def __init__(self, process_ = None, discount_=0, daysperyear_ = 260, numofruns_ = 10000):
@@ -25,9 +27,9 @@ class MCEuropeanEngine(PricingEngine):
         self.discount = discount_
         self.daysperyear = daysperyear_
         self.numofruns = numofruns_
-        
-    def calculate(self): 
-        if self.arguments == {}:
+
+    def calculate(self):
+        if not self.arguments:
             print '>> Specify arguments of the option. Call set_argument()\n'
             exit(1)
         T = self.arguments['Expiry']

@@ -29,10 +29,9 @@ class C1Function1D(Function1D):
             return 0.5*(self.innerFunc(x + eps) - self.innerFunc(x - eps))/eps
         
 # subclass: 1-dim function  2nd order differentiable     
-class C2Function1D(Function1D):
+class C2Function1D(C1Function1D):
     def __init__(self, innerFunc_, firstDerivative_ = None, secondDerivative_ = None):
-        super(C2Function1D, self).__init__(innerFunc_)
-        self.firstDerivative = firstDerivative_
+        super(C2Function1D, self).__init__(innerFunc_, firstDerivative_)
         self.secondDerivative = secondDerivative_
         
     def der_2nd(self, x):

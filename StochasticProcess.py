@@ -23,7 +23,7 @@ class StochasticProcess1D(object):
 
     @abc.abstractmethod
     def increment(self, oldX, h):
-        return 'Not Implemented'
+        return
     
     def get_samplepath(self, T, numberofsteps, numberofpaths):
         N = numberofsteps

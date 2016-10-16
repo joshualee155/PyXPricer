@@ -5,7 +5,8 @@ Created on Thu Jun  9 08:54:51 2016
 @author: CongLiu
 """
 
-class Option:
+
+class Option(object):
     engine = None
     price = None
     def __init__(self): pass
@@ -20,23 +21,23 @@ class Option:
         return self.engine.result
 
 
-class EuropeanOption(Option):    
+class EuropeanOption(Option):
       
     def __init__(self, payoff_ = None, expiry_ = None,type_ = None, strike_ = None):
+        super(EuropeanOption, self).__init__()
         self.payoff = payoff_
         self.expiry = expiry_
         self.ty = type_
         self.strike = strike_
     
     def set_arguments(self):
-        if self.engine == None:
+        if not self.engine:
             print '>> Pricing engine not defined. Call set_engine().\n'
             exit(1)
-        arguments = {}
-        arguments['Payoff'] = self.payoff
-        arguments['Expiry'] = self.expiry
-        arguments['Type'] = self.ty
-        arguments['Strike'] = self.strike
+        arguments = {'Payoff': self.payoff,
+                     'Expiry': self.expiry,
+                     'Type': self.ty,
+                     'Strike': self.strike}
         self.engine.set_arguments(arguments)
         
     def set_payoff(self, payoff_):

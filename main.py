@@ -1,21 +1,8 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Sat Jun 11 11:34:19 2016
-
-@author: CongLiu
-"""
-
-import os
-os.chdir('/Users/CongLiu/Dropbox/Programming/JP/Codes/')
-
-outputdir = '/Users/CongLiu/Dropbox/Programming/JP/Graphs/'
-
 import numpy as np
 import StochasticProcess as SP
 import PricingEngine as PE
 import Option
 import FunctionClass as FC
-import pandas as pd  # recording command currently muted to avoid data ruin
 from scipy.stats import norm
 
 def main():
@@ -32,7 +19,6 @@ def payoff_CashOrNothing(K):
 def price_option(option, engine):
     option.set_engine(engine)
     option.set_arguments()
-    option.engine.calculate()
     return option.get_price()
     
 def price_EuropeanCall():
@@ -42,19 +28,17 @@ def price_EuropeanCall():
     expiry = 1
     drift = FC.C2Function1D(lambda x: 0)
     Kset = np.linspace(8.0,12.0,41)
-    diffusion_set = {'const':FC.C2Function1D(lambda x: sigma0),\
-                     'linear':FC.C2Function1D(lambda x: sigma0 * x),\
-                     'sqrt': FC.Function1D(lambda x: sigma0 * np.sqrt(x)),\
-                     'sine': FC.C2Function1D(lambda x: np.sin(x))}  
+    diffusion_set = {'const': FC.C2Function1D(lambda x: sigma0),
+                     'linear': FC.C2Function1D(lambda x: sigma0 * x),
+                     'sqrt': FC.Function1D(lambda x: sigma0 * np.sqrt(x)),
+                     'sine': FC.C2Function1D(lambda x: np.sin(x))}
                      
     # ===== linear diffusion ===== #
     process = SP.TimeHomoItoProcess1D(s0,drift,diffusion_set['linear'])
     price_FD = np.zeros(len(Kset))   
     price_MC = np.zeros(len(Kset)) 
     price_BS = np.zeros(len(Kset))
-    for kk in range(len(Kset)):
-        print kk
-        strike = Kset[kk]
+    for kk, strike in enumerate(Kset):
         payoff = payoff_EuropeanCall(strike)
         option = Option.EuropeanOption(payoff, expiry, 'call', strike)                
         
@@ -74,8 +58,8 @@ def price_EuropeanCall():
     results[:,1] = price_FD     
     results[:,2] = price_MC
     results[:,3] = price_BS
-    #pd.DataFrame(results).to_csv(outputdir + 'Call_linear.csv', header = False, index = False)    
-    
+    print results
+
     # ===== constant diffusion ===== #
     process = SP.TimeHomoItoProcess1D(s0,drift,diffusion_set['const'])
     price_FD = np.zeros(len(Kset))   
@@ -165,9 +149,9 @@ def price_CallOrNothing():
     rtn = 1
     drift = FC.C2Function1D(lambda x: 0)
     Kset = np.linspace(8.0,12.0,41)
-    diffusion_set = {'const':FC.C2Function1D(lambda x: sigma0),\
-                     'linear':FC.C2Function1D(lambda x: sigma0 * x),\
-                     'sqrt': FC.Function1D(lambda x: sigma0 * np.sqrt(x)),\
+    diffusion_set = {'const': FC.C2Function1D(lambda x: sigma0),
+                     'linear': FC.C2Function1D(lambda x: sigma0 * x),
+                     'sqrt': FC.Function1D(lambda x: sigma0 * np.sqrt(x)),
                      'sine': FC.C2Function1D(lambda x: np.sin(x))}     
     # ===== linear diffusion ===== #
     process = SP.TimeHomoItoProcess1D(s0,drift,diffusion_set['linear'])
@@ -277,3 +261,6 @@ def price_CallOrNothing():
     results[:,2] = price_MC
     results[:,3] = price_MS
     #pd.DataFrame(results).to_csv(outputdir + 'Digital_sine.csv', header = False, index = False)    
+
+
+main()

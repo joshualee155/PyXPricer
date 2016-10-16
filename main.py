@@ -43,7 +43,7 @@ def price_EuropeanCall():
         payoff = payoff_EuropeanCall(strike)
         option = Option.EuropeanOption(payoff, expiry, 'call', strike)                
         
-        engineMC = PE.MCEuropeanEngine(process, r)
+        engineMC = PE.MCEuropeanEngine( process )
         price_MC[kk] = price_option(option,engineMC)
         
         engineFD = PE.FDEuropeanNoDriftTimeHomoIto( process )
@@ -51,8 +51,8 @@ def price_EuropeanCall():
         price_FD[kk] = price_option(option,engineFD)
         
         GBMprocess = SP.GBM1D(s0,0.0,sigma0)
-        GBMengine = PE.BSAnalyticEngine(GBMprocess, r)
-        price_BS[kk] = price_option(option,GBMengine)
+        GBMengine = PE.BSAnalyticEngine( GBMprocess , r )
+        price_BS[kk] = price_option( option , GBMengine )
     
     results = np.zeros([len(Kset),4])
     results[:,0] = Kset 

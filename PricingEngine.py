@@ -29,7 +29,7 @@ class MCEuropeanEngine(PricingEngine):
         payoff = self.arguments['Payoff']
         discoutfactor = np.exp(-self.discount * T)          
         
-        terminalprice = self.process.get_terminalvalue(T, int(T)*self.daysperyear, self.numofruns)        
+        terminalprice = self.process.get_terminalvalue(T, int(T*self.daysperyear), self.numofruns)
         optionprice = discoutfactor * np.asarray(map(payoff, terminalprice)) 
 
         self.result = np.mean(optionprice)

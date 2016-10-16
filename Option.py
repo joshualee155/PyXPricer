@@ -8,15 +8,14 @@ Created on Thu Jun  9 08:54:51 2016
 
 class Option(object):
     engine = None
-    price = None
+    result = None
     def __init__(self): pass
-         
-    def set_engine(self, engine_):
-        self.engine = engine_
-        
-    def set_arguments(self): pass
+
+    def set_arguments(self):
+        raise NotImplementedError
     
     def get_price(self):
+        self.set_arguments()
         self.engine.calculate()
         return self.engine.result
 
@@ -39,16 +38,4 @@ class EuropeanOption(Option):
                      'Type': self.ty,
                      'Strike': self.strike}
         self.engine.set_arguments(arguments)
-        
-    def set_payoff(self, payoff_):
-        self.payoff = payoff_
-
-    def set_expiry(self, expiry_):
-        self.expiry = expiry_        
-        
-    def get_payoff(self, spot): 
-        return self.payoff(spot)
-        
-    def get_expiry(self): 
-        return self.expiry
 

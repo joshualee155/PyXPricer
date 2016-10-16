@@ -1,25 +1,18 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jun 10 18:27:37 2016
-
-@author: CongLiu
-"""
-
-'''
-Uses Thomas algorithm for solving a tridiagonal matrix for n unknowns. 
-a, b, and c are a list of the matrix entries
-  Matrix form of:
-  |b1 c1          | |x1]  |y1]
-  |a2 b2 c2       | |x2|  |y2|
-  |   a3 b3 c3    | |x3|= |y3|
-  |               | |  |  |  |
-  |           cn-1| |  |  |  |
-  |         an bn | |xn|  |yn|
-'''
-
 import numpy as np
 
 def TriDiagSolver(a,b,c,y):
+    """
+    Uses Thomas algorithm for solving a tridiagonal matrix for n unknowns.
+    a, b, and c are a list of the matrix entries
+      Matrix form of:
+      |b1 c1          | |x1]  |y1]
+      |a2 b2 c2       | |x2|  |y2|
+      |   a3 b3 c3    | |x3|= |y3|
+      |               | |  |  |  |
+      |           cn-1| |  |  |  |
+      |         an bn | |xn|  |yn|
+    """
+
     m = len(b)
     
     if len(a) != m - 1 or len(c) != m-1:

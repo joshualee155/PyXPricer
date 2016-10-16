@@ -37,5 +37,4 @@ class EuropeanOption(Option):
                      'Expiry': self.expiry,
                      'Type': self.ty,
                      'Strike': self.strike}
-        self.engine.set_arguments(arguments)
-
+        self.engine.arguments = arguments

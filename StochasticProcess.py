@@ -12,15 +12,18 @@ Created on Wed Jun  8 14:43:45 2016
 
 import numpy as np
 import FunctionClass
+import abc
 
 
-class StochasticProcess1D:
-    def __init__(self, x0_ = None, d_ = None):
-        self.x0 = x0_
-        self.Discretization = d_
-     
+class StochasticProcess1D(object):
+    __metaclass__ = abc.ABCMeta
+
+    x0 = None
+    d = None
+
+    @abc.abstractmethod
     def increment(self, oldX, h):
-        return oldX
+        return 'Not Implemented'
     
     def get_samplepath(self, T, numberofsteps, numberofpaths):
         N = numberofsteps
@@ -46,13 +49,9 @@ class StochasticProcess1D:
             oldX = newX
             
         return newX
-        
-    def get_currentvalue(self): return self.x0
-    
     
 class TimeHomoItoProcess1D(StochasticProcess1D):
-    
-    def __init__(self,x0_,drift_, diffusion_,d_ = 'Euler'):
+    def __init__(self, x0_, drift_, diffusion_, d_='Euler'):
         self.x0 = x0_
         self.drift = drift_
         self.diffusion = diffusion_

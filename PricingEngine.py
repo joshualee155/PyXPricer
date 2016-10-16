@@ -9,28 +9,22 @@ import numpy as np
 import TriDiag as TD
 from scipy.stats import norm
 
-class PricingEngine:
+
+class PricingEngine(object):
     result = None
     arguments = {}
     def __init__(self): pass
 
-    def set_arguments(self, arguments_):
-        self.arguments = arguments_
-         
-    def get_arguments(self): pass
-   
-    def get_result(self): return self.result
-   
-   
+    def calculate(self):
+        raise NotImplementedError
+
 class MCEuropeanEngine(PricingEngine):
     def __init__(self, process_ = None, discount_=0, daysperyear_ = 260, numofruns_ = 10000):
+        super(MCEuropeanEngine, self).__init__()
         self.process = process_
         self.discount = discount_
         self.daysperyear = daysperyear_
         self.numofruns = numofruns_
-        
-    def set_process(self, process_):
-        self.process = process_
         
     def calculate(self): 
         if self.arguments == {}:
@@ -46,8 +40,12 @@ class MCEuropeanEngine(PricingEngine):
         self.result = np.mean(optionprice)
         
 class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
-    def __init__(self, process_ = None, discount_ = 0, nT_=100, nS_=100, \
-                 maxS_ = 2, minS_ = 0, scheme_ = 0):
+    boundarytype = None
+    upper_value = None
+    lower_value = None
+
+    def __init__(self, process_=None, discount_=0, nT_=100, nS_=100, maxS_=2, minS_=0, scheme_=0):
+        super(FDEuropeanNoDriftTimeHomoIto, self).__init__()
         self.process = process_
         self.discount = discount_
         self.nT = nT_
@@ -58,28 +56,27 @@ class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
         
     def set_boundary(self, boundarytype_= None, upper_value_ = None, lower_value_ = None):       
         self.boundarytype= boundarytype_
-        self.upper_value = upper_value_  
+        self.upper_value = upper_value_
         self.lower_value = lower_value_
         
-    def calculate(self):       
-        if self.boundarytype == None:
+    def calculate(self):
+        if not self.boundarytype:
             print '>> Unknown Boundary Conditions. Call set_boundary().\n'
             exit(1)
-    
-        S0 = self.process.get_currentvalue()
+
+        S0 = self.process.x0
         diffusion = self.process.diffusion
         expiry = self.arguments['Expiry']
         payoff = self.arguments['Payoff']
         
         dt = float(expiry)/self.nT
         dS = float(S0) * (self.maxS-self.minS)/self.nS
-        
-        self.gridT = np.linspace(0,expiry,self.nT+1)
-        self.gridS = np.linspace(S0*self.minS,S0*self.maxS, self.nS+1)
-        
-        oldU = np.asarray(map(payoff, self.gridS))         # size: nS+1
+
+        gridS = np.linspace(S0 * self.minS, S0 * self.maxS, self.nS + 1)
+
+        oldU = np.asarray(map(payoff, gridS))  # size: nS+1
         newU = np.zeros(np.shape(oldU))                    # size: nS+1
-        volvector = np.asarray(map(diffusion, self.gridS)) # size: nS+1
+        volvector = np.asarray(map(diffusion, gridS))  # size: nS+1
         
         alpha = 0.5 * dt/dS/dS * volvector * volvector     # size: nS+1
         alpha_b = alpha[1:-1]    # b; size: nS-1
@@ -92,23 +89,23 @@ class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
         
         for tt in range(self.nT - 1, -1,-1):
             # Cu size: nS-1
-            Cu = TD.TriDiagMultVector(self.scheme * alpha_a, 1-2*self.scheme*alpha_b,\
-                                      self.scheme * alpha_c, oldU[1:-1])
+            Cu = TD.TriDiagMultVector(self.scheme * alpha_a, 1 - 2 * self.scheme * alpha_b, self.scheme * alpha_c,
+                                      oldU[1:-1])
             if self.boundarytype == 'Dirichlet':
                 newU[0] = self.lower_value
                 newU[-1] = self.upper_value
                 b0 = -self.scheme * alpha_b[0] * oldU[0] - (1-self.scheme)*alpha_b[0]*newU[0]
                 b1 = -self.scheme * alpha_b[-1]* oldU[-1]- (1-self.scheme)*alpha_b[-1]*newU[-1]
-                Cu[0] = Cu[0] - b0
-                Cu[-1] = Cu[-1] - b1
+                Cu[0] -= b0
+                Cu[-1] -= b1
                 newU[1:-1] = TD.TriDiagSolver(Da,Db,Dc,Cu)
             elif self.boundarytype == 'Neumann':
                 b0 = -self.scheme * alpha_b[0] * oldU[0] + (1-self.scheme)*alpha_b[0]*dS*self.lower_value
                 b1 = -self.scheme * alpha_b[-1]*oldU[-1] - (1-self.scheme)*alpha_b[-1]*dS*self.upper_value
-                Db[0] = Db[0] - (1-self.scheme)*alpha_b[0]
-                Db[-1] = Db[-1]-(1-self.scheme)*alpha_b[-1]
-                Cu[0] = Cu[0] - b0
-                Cu[-1] = Cu[-1] - b1
+                Db[0] -= (1 - self.scheme) * alpha_b[0]
+                Db[-1] -= (1 - self.scheme) * alpha_b[-1]
+                Cu[0] -= b0
+                Cu[-1] -= b1
                 newU[1:-1] = TD.TriDiagSolver(Da,Db,Dc,Cu)
                 newU[0] = newU[1] - dS * self.lower_value
                 newU[-1]= newU[-2]+ dS * self.upper_value
@@ -123,10 +120,12 @@ class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
         
 class BSAnalyticEngine(PricingEngine):        
     def __init__(self, process_ = None, discount_ = 0):
+        super(BSAnalyticEngine, self).__init__()
         self.process = process_
         self.discount = discount_
-    
-    def __BSPutCall(self,S0,K,r,sigma,T,ty):
+
+    @staticmethod
+    def __BSPutCall(S0, K, r, sigma, T, ty):
         d1 = (np.log(S0/K) + (r + 0.5*sigma*sigma)*T )/ (sigma*np.sqrt(T)+1.e-7)
         d2 = d1 - sigma * np.sqrt(T)
         
@@ -145,8 +144,8 @@ class BSAnalyticEngine(PricingEngine):
         T = self.arguments['Expiry']
         ty = self.arguments['Type']
         strike = self.arguments['Strike']
-        discount = self.discount  
-        S0 = self.process.get_currentvalue()
+        discount = self.discount
+        S0 = self.process.x0
         vol = self.process.sigma
         
         self.result = self.__BSPutCall(S0,strike,discount,vol,T,ty)

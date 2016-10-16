@@ -27,7 +27,7 @@ def price_EuropeanCall():
     sigma0 = 0.2
     expiry = 1
     drift = FC.C2Function1D(lambda x: 0)
-    Kset = np.linspace(8.0,12.0,41)
+    Kset = np.linspace(8.0, 12.0, 4)
     diffusion_set = {'const': FC.C2Function1D(lambda x: sigma0),
                      'linear': FC.C2Function1D(lambda x: sigma0 * x),
                      'sqrt': FC.Function1D(lambda x: sigma0 * np.sqrt(x)),

@@ -3,7 +3,7 @@ import StochasticProcess as SP
 import PricingEngine as PE
 import Option
 import FunctionClass as FC
-from scipy.stats import norm
+from   scipy.stats import norm
 
 def main():
     price_EuropeanCall()

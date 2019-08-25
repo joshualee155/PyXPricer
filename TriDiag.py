@@ -16,7 +16,7 @@ def TriDiagSolver(a,b,c,y):
     m = len(b)
     
     if len(a) != m - 1 or len(c) != m-1:
-        print '>> Wrong index size for a in TriDiagSolver.\n'
+        print( '>> Wrong index size for a in TriDiagSolver.\n' )
         exit(1)
 
     # Calculate p and q

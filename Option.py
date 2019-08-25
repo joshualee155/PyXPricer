@@ -26,7 +26,7 @@ class EuropeanOption(Option):
 
     def populate_arguments(self):
         if not self.engine:
-            print '>> Pricing engine not defined. Call set_engine().\n'
+            print( '>> Pricing engine not defined. Call set_engine().\n' )
             exit(1)
         arguments = {'Payoff': self.payoff,
                      'Expiry': self.expiry,

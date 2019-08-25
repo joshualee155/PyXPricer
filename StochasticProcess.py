@@ -32,7 +32,7 @@ class StochasticProcess1D(object):
         h = float(T)/N
         oldX = self.x0 * np.ones(numberofpaths)
         
-        for ii in range(N):
+        for _ in range(N):
             newX = self.increment(oldX, h)
             oldX = newX
             
@@ -59,10 +59,10 @@ class TimeHomoItoProcess1D(StochasticProcess1D):
             if isinstance(self.diffusion, FunctionClass.C2Function1D):
                 newX = oldX + mu * h + sigma * np.sqrt(h) * Z + 0.5 * sigma * self.diffusion.der_1st(oldX) * h * (Z * Z - 1.0)
             else:
-                print '>> C^2 function required for Milstein scheme. \n'
+                print( '>> C^2 function required for Milstein scheme. \n' )
                 exit(1)  
         else:
-            print '>> No such scheme defined.\n'
+            print( '>> No such scheme defined.\n' )
             exit(1)
         
         return newX

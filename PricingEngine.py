@@ -23,7 +23,7 @@ class MCEuropeanEngine(PricingEngine):
 
     def calculate(self):
         if not self.arguments:
-            print '>> Specify arguments of the option. Call set_argument()\n'
+            print( '>> Specify arguments of the option. Call set_argument()\n' )
             exit(1)
         T = self.arguments['Expiry']
         payoff = self.arguments['Payoff']
@@ -56,7 +56,7 @@ class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
         
     def calculate(self):
         if not self.boundarytype:
-            print '>> Unknown Boundary Conditions. Call set_boundary().\n'
+            print( '>> Unknown Boundary Conditions. Call set_boundary().\n' )
             exit(1)
 
         S0 = self.process.x0
@@ -82,7 +82,7 @@ class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
         Dc = -(1-self.scheme) * alpha_c           # size: nS-2 
         Da = -(1-self.scheme) * alpha_a           # size: nS-2
         
-        for tt in range(self.nT - 1, -1,-1):
+        for _ in range(self.nT - 1, -1,-1):
             # Cu size: nS-1
             Cu = TD.TriDiagMultVector(self.scheme * alpha_a, 1 - 2 * self.scheme * alpha_b, self.scheme * alpha_c,
                                       oldU[1:-1])
@@ -105,7 +105,7 @@ class FDEuropeanNoDriftTimeHomoIto(PricingEngine):
                 newU[0] = newU[1] - dS * self.lower_value
                 newU[-1]= newU[-2]+ dS * self.upper_value
             else:
-                print '>> Boundary type not supported.\n'
+                print( '>> Boundary type not supported.\n' )
                 exit(1)
             
             oldU = newU
@@ -129,12 +129,12 @@ class BSAnalyticEngine(PricingEngine):
         elif ty.lower() == 'put':
             return K*np.exp(-r*T)*norm.cdf(-d2) - S0 * norm.cdf(-d1)
         else:
-            print '>> Option type neither call or put. \n'
+            print( '>> Option type neither call or put. \n' )
             exit(1)
 
     def calculate(self): 
         if self.arguments == {}:
-            print '>> Specify arguments of the option. Call set_argument()\n'
+            print( '>> Specify arguments of the option. Call set_argument()\n' )
             exit(1)
         T = self.arguments['Expiry']
         ty = self.arguments['Type']

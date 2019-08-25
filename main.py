@@ -39,7 +39,7 @@ def price_EuropeanCall():
     price_MC = np.zeros(len(Kset)) 
     price_BS = np.zeros(len(Kset))
     for kk, strike in enumerate(Kset):
-        print kk
+        print( kk )
         payoff = payoff_EuropeanCall(strike)
         option = Option.EuropeanOption(payoff, expiry, 'call', strike)                
         
@@ -59,7 +59,7 @@ def price_EuropeanCall():
     results[:,1] = price_FD     
     results[:,2] = price_MC
     results[:,3] = price_BS
-    print results
+    print( results )
 
     # # ===== constant diffusion ===== #
     # process = SP.TimeHomoItoProcess1D(s0,drift,diffusion_set['const'])
@@ -159,7 +159,7 @@ def price_CallOrNothing():
     price_MC = np.zeros(len(Kset)) 
     price_BS = np.zeros(len(Kset))
     for kk in range(len(Kset)):
-        print kk
+        print( kk )
         strike = Kset[kk]
         payoff = payoff_CashOrNothing(strike)
         option = Option.EuropeanOption(payoff, expiry, strike_ = strike)        
@@ -187,7 +187,7 @@ def price_CallOrNothing():
     price_MC = np.zeros(len(Kset)) 
     price_B = np.zeros(len(Kset))
     for kk in range(len(Kset)):
-        print kk
+        print( kk )
         strike = Kset[kk]
         payoff = payoff_CashOrNothing(strike)
         option = Option.EuropeanOption(payoff, expiry, strike_ = strike)               
@@ -214,7 +214,7 @@ def price_CallOrNothing():
     price_FD = np.zeros(len(Kset))   
     price_MC = np.zeros(len(Kset)) 
     for kk in range(len(Kset)):
-        print kk
+        print( kk )
         strike = Kset[kk]
         payoff = payoff_CashOrNothing(strike)
         option = Option.EuropeanOption(payoff, expiry, strike_ = strike)                
@@ -237,7 +237,7 @@ def price_CallOrNothing():
     price_MC = np.zeros(len(Kset)) 
     price_MS = np.zeros(len(Kset))
     for kk in range(len(Kset)):
-        print kk
+        print( kk )
         strike = Kset[kk]
         payoff = payoff_CashOrNothing(strike)
         option = Option.EuropeanOption(payoff, expiry, strike_ = strike)   
